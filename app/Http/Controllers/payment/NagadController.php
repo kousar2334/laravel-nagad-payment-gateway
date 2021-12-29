@@ -22,25 +22,25 @@ class NagadController extends Controller
     public function __construct(NagadRepository $nagad_repository)
     {
         $this->nagad_repository = $nagad_repository;
-        $this->merchant_id = "";
-        $this->private_key = "";
-        $this->public_key = "";
-        $this->account_number = "";
-        $this->nagadHost = "";
+        $this->merchant_id = "Your merchant id";
+        $this->private_key = "Merchant private key";
+        $this->public_key = "Merchant public key";
+        $this->account_number = "Merchant number";
+        $this->nagadHost = "Merchant host";
     }
 
     /**
-     * Reseller checkout with nagad payment gateway
+     * Make payment with nagad
      * 
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
      */
     public function paymentWithNagad(Request $request)
     {
         try {
             $DateTime = Date('YmdHis');
             $invoiceNo = date('dmyhis');
-            $this->callback_url = 'http://127.0.0.1:8000/nagad-payment-varify';
+            $this->callback_url = route('nagad.varify');
             $SensitiveData = [
                 'merchantId' => $this->merchant_id,
                 'datetime' => $DateTime,
@@ -87,13 +87,13 @@ class NagadController extends Controller
                             $callBackUrl = ($Result_Data_Order['callBackUrl']);
                             return new RedirectResponse($callBackUrl);
                         } else {
-                            return 'payment failed 1';
+                            return 'Payment failed';
                         }
                     } else {
-                        return 'payment failed 2';
+                        return 'Payment failed';
                     }
                 } else {
-                    return 'payment failed 3';
+                    return 'Payment failed';
                 }
             } else {
                 return $Result_Data;
@@ -107,7 +107,7 @@ class NagadController extends Controller
      * Varify nagad payment
      * 
      * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
      */
     public function varifyNagadPayment(Request $request)
     {
@@ -125,7 +125,7 @@ class NagadController extends Controller
         }
     }
     /**
-     * Redire nagad payment success page
+     * Redirect nagad payment success page
      * 
      * @return mixed
      */
